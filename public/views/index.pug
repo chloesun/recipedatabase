@@ -1,0 +1,47 @@
+html 
+  head
+    title Recipes Database
+    link(rel='stylesheet', href='./style.css')
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js")
+    script(src='./recipePage.js')
+body
+    form.hero-viewer(name='myform', method='GET')
+      h1  Comp 2406 Recipes Database!
+      |  
+      label.drop-down-list
+        | Recipe:
+        br
+        |  
+        select#recipeSelect
+      .button
+        button#recipeViewButton(type='button')  View
+      hr
+      .recipecontent
+        label
+          | Name:
+          br
+          |  
+          input#recipeName(type='text', name='name')
+          br
+          |  Duration:
+          br
+          |  
+          input#recipeDuration(type='text', name='duration')
+          br
+          |  Ingredients:
+          br
+          |  
+          textarea#recipeIngredients.resizedTextbox(type='text', name='ingredients')
+          br
+          |  Steps:
+          br
+          |  
+          textarea#recipeDirections.resizedTextbox(type='text', name='steps')
+          br
+          |  Notes:
+          br
+          |  
+          input#recipeNotes(type='text', name='notes')
+          br
+        .button
+          button#recipeSubmitButton(type='button') Submit
