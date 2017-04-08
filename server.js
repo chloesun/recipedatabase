@@ -34,19 +34,15 @@ app.get('/', function (req, res) {
 });
 
 app.get('/recipes', function(req, res, next){
-	var resultArray = [];
 	mongo.connect(url, function(err, db){
 		assert.equal(null, err);
-		var cursor = db.collection('recipes').find();
-		cursor.forEach(function(doc, err){
+		db.collection('recipes').find().toArray(function(err, docs) {
 			assert.equal(null, err);
-			resultArray.push(doc);
-		}, function(){
 			db.close();
-			res.render('index');
+			var names = docs.map(function(doc){ return doc.name;}); //return an array of names [name1, name2, ...]
+			res.json({'names': names}); // {names: [name1, name2, ...]}
 		});
 	});
-
 });
 
 app.post('/recipe', function(req, res, next){
@@ -56,19 +52,42 @@ app.post('/recipe', function(req, res, next){
 		name: req.body.name,
 		duration: req.body.duration,
 		ingredients: req.body.ingredients,
-		steps: req.body.steps,
+		directions: req.body.directions,
 		notes: req.body.notes
+	};
+
+	if(!item.name){
+		res.status(400).send("Bad Request: name missing");
+	}else{
+		mongo.connect(url, function(err, db){
+			assert.equal(null, err);
+			db.collection('recipes').save(item, function(err){
+				if(err){
+					res.status(500).send("server error!");
+				}else{
+					console.log('Item saved');
+				
+					//res.redirect('/');
+					res.end();
+				}
+				db.close();
+			});
+		});
 	}
+});
+
+
+app.get('/recipe/:name', function(req, res, next){
+	console.log("recipe name: " + req.params.name);
 
 	mongo.connect(url, function(err, db){
 		assert.equal(null, err);
-		db.collection('recipes').save(item, function(err, req, res){
-			assert.equal(null, err);
-			console.log('Item saved');
-			db.close();
-			//res.redirect('/');
-		})
+		db.collection('recipes').findOne({'name': req.params.name}, function(err, item){
+			res.json(item);
+			console.log(item);
+		});
 	})
-
 });
+
+
 

@@ -30,13 +30,11 @@ body
           br
           |  Ingredients:
           br
-          |  
           textarea#recipeIngredients.resizedTextbox(type='text', name='ingredients')
           br
           |  Steps:
           br
-          |  
-          textarea#recipeDirections.resizedTextbox(type='text', name='steps')
+          textarea#recipeDirections.resizedTextbox(type='text', name='directions')
           br
           |  Notes:
           br
@@ -45,3 +43,7 @@ body
           br
         .button
           button#recipeSubmitButton(type='button') Submit
+          |  
+          span#confirmed.click
+            | &check;
+            span
